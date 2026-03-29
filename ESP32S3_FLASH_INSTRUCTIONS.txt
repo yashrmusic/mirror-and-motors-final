@@ -1,0 +1,40 @@
+ESP32S3 Firmware Flashing Instructions (VS Code Compatible)
+===========================================================
+
+This guide specifically details how to flash the ESP32S3 microcontroller for the Mirror LED project using VS Code terminals.
+
+1. Environment Setup
+--------------------
+Ensure you have the necessary Python tools installed. Run this in the VS Code terminal:
+
+    pip install platformio esptool pyserial
+
+2. Automated Flashing (Recommended)
+-----------------------------------
+The easiest way to flash the ESP32S3 is using the project's auto-flash tool. It handles port detection and build arguments automatically.
+
+    python tools/auto_flash_esp32.py
+
+3. Manual Flashing with PlatformIO
+----------------------------------
+If you need to run the command manually (e.g., for debugging), use the following command.
+Note: Replace `COMx` with your actual device port (e.g., COM6).
+
+    python -m platformio run --target upload --upload-port COMx -d firmware/esp32
+
+* Key flags:
+    * `--target upload`: Tells PlatformIO to upload the code.
+    * `-d firmware/esp32`: Specifies the project directory containing `platformio.ini`.
+    * `--upload-port COMx`: Forces the specific serial port.
+
+4. Manual Flashing with esptool
+-------------------------------
+If you have a pre-compiled `firmware.bin` and want to flash it directly without rebuilding:
+
+    python -m esptool --chip esp32s3 --port COMx --baud 460800 write_flash -z 0x10000 firmware/esp32/.pio/build/esp32s3/firmware.bin
+
+5. Troubleshooting
+------------------
+- **Port Not Found:** Run `python -m serial.tools.list_ports` to list available ports.
+- **Permission Error:** Close any other terminals or programs (like Serial Monitor) using the COM port.
+- **Bootloader Mode:** If flashing fails, hold the BOOT button on the ESP32S3, press RESET, release BOOT, then try flashing again.

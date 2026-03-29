@@ -1,0 +1,32 @@
+VSCode Flashing Instructions for Mirror LED Firmware
+==================================================
+
+This file documents the working process to flash the ESP32 firmware from VSCode.
+
+1. Prerequisites
+----------------
+Open a terminal in VSCode (Ctrl+`) and install the required tools:
+
+    pip install platformio esptool pyserial
+
+2. Flashing the Firmware
+------------------------
+Run the auto-flash script which has been configured to work with the VSCode environment:
+
+    python tools/auto_flash_esp32.py
+
+This script will automatically:
+- Detect the ESP32 COM port (e.g., COM6).
+- Build the firmware using PlatformIO.
+- Upload the firmware to the device.
+
+3. Verification
+---------------
+After flashing, you can verify the connection by running:
+
+    python tools/debug/test_esp32_connection.py
+
+4. Notes
+--------
+- The script `tools/auto_flash_esp32.py` was modified to use `sys.executable` to ensure it uses the correct Python environment for PlatformIO and esptool calls.
+- If auto-detection fails, check the device connection in Windows Device Manager.

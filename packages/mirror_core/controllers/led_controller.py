@@ -318,6 +318,90 @@ class LEDController:
 
         return bytes(packet)
 
+    def pack_led_packet_1bit(self, led_frame, threshold=128):
+        """
+        Pack LED frame into 1-bit compressed packet.
+        8x smaller than full brightness! (256 bytes vs 2048 bytes)
+        
+        Firmware expects:
+          [0xAA, 0xBB, 0x03, 256 bytes of packed bits]
+        
+        Each byte contains 8 pixels (MSB first)
+        Pixel order: row-major, left to right, top to bottom
+        """
+        if led_frame.shape[:2] != (self.height, self.width):
+            raise ValueError(f"LED frame must be {self.height}x{self.width}")
+
+        # Convert to grayscale if needed
+        if led_frame.ndim == 3 and led_frame.shape[2] == 3:
+            brightness = led_frame.max(axis=2)
+        else:
+            brightness = led_frame
+
+        # Apply hardware mapping
+        brightness = self.remap_for_hardware(brightness)
+        
+        # Threshold to binary
+        binary = (brightness > threshold).astype(np.uint8)
+        flat = binary.flatten()
+        
+        # Pack 8 pixels per byte
+        packed = []
+        for i in range(0, len(flat), 8):
+            byte_val = 0
+            for bit in range(8):
+                if i + bit < len(flat) and flat[i + bit]:
+                    byte_val |= (1 << (7 - bit))
+            packed.append(byte_val)
+        
+        # Header: 0xAA 0xBB 0x03 (0x03 = 1-bit mode)
+        packet = bytes([0xAA, 0xBB, 0x03]) + bytes(packed)
+        return packet
+
+    def pack_led_packet_rle(self, led_frame, threshold=128):
+        """
+        Pack LED frame using Run-Length Encoding.
+        Extremely efficient for silhouettes with large solid areas.
+        
+        Firmware expects:
+          [0xAA, 0xBB, 0x04, length_hi, length_lo, RLE data...]
+        
+        RLE format: alternating (count, value) pairs
+        - count: 1-255 (0 = end marker)
+        - value: 0 or 255
+        """
+        if led_frame.shape[:2] != (self.height, self.width):
+            raise ValueError(f"LED frame must be {self.height}x{self.width}")
+
+        # Convert to grayscale if needed
+        if led_frame.ndim == 3 and led_frame.shape[2] == 3:
+            brightness = led_frame.max(axis=2)
+        else:
+            brightness = led_frame
+
+        # Apply hardware mapping
+        brightness = self.remap_for_hardware(brightness)
+        
+        # Threshold to binary (0 or 255)
+        binary = ((brightness > threshold).astype(np.uint8)) * 255
+        flat = binary.flatten()
+        
+        # RLE encode
+        rle = []
+        i = 0
+        while i < len(flat):
+            val = flat[i]
+            count = 0
+            while i < len(flat) and flat[i] == val and count < 255:
+                count += 1
+                i += 1
+            rle.extend([count, val])
+        
+        # Header: 0xAA 0xBB 0x04 length(2 bytes) data...
+        rle_len = len(rle)
+        packet = bytes([0xAA, 0xBB, 0x04, (rle_len >> 8) & 0xFF, rle_len & 0xFF]) + bytes(rle)
+        return packet
+
 
 # Quick test
 if __name__ == "__main__":

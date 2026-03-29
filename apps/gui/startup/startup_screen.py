@@ -30,8 +30,19 @@ def run_startup_screen():
     # Detect ESP32 serial ports
     ports = serial.tools.list_ports.comports()
     esp32_ports = []
+    esp32s3_port = None  # Track if we found an ESP32-S3 specifically
+    
     for port in ports:
-        if 'CP210' in port.description or 'CH340' in port.description or 'USB' in port.description:
+        desc = port.description or ""
+        hwid = port.hwid or ""
+        hwid_lower = hwid.lower()
+        
+        # Check for ESP32-S3 native USB first (VID 303A is Espressif)
+        if "303a" in hwid_lower:
+            esp32_ports.insert(0, port.device)  # Prioritize ESP32-S3
+            esp32s3_port = port.device
+            print(f"✅ ESP32-S3 native USB detected on {port.device}")
+        elif 'CP210' in desc or 'CH340' in desc or 'USB' in desc:
             esp32_ports.append(port.device)
 
     # Load existing config

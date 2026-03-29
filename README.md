@@ -1,109 +1,42 @@
-# Mirror Body Project
+# Kinetic Mirror - LED Control System
 
-A full-body LED and motor simulation system for interactive art installations.
-
-## 🎯 Project Structure
-
-This project is **organized into separate, independent systems**:
-
-- **`motors/`** - Motor control system (32 servos)
-- **`leds/`** - LED control system (2048 LEDs)
-- **`shared/`** - Shared utilities (serial, simulation)
-
-Each system can run **independently** without the other.
+A high-performance kinetic art display utilizing real-time body silhouette tracking to drive a 32x64 LED matrix wall.
 
 ## 🚀 Quick Start
 
-### Run Motors Only
-```bash
-cd motors/gui
-python motor_gui.py
-```
+1. **Prerequisites**
+   - Python 3.9+
+   - USB Web Camera
+   - ESP32-S3 with 32x64 WS2812B LED Matrix (Hardware Mode)
 
-### Run LEDs Only
-```bash
-cd leds/gui
-python led_gui.py
-```
+2. **Installation**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### Run Both (Separate Processes)
-```bash
-# Terminal 1 - Motors
-cd motors/gui
-python motor_gui.py
+3. **Run Application**
+   Double-click `run.bat` or run:
+   ```bash
+   python -m apps.gui.main
+   ```
 
-# Terminal 2 - LEDs
-cd leds/gui
-python led_gui.py
-```
+## 🎮 Features
 
-## 📁 Project Organization
+- **Optimized Silhouette Tracking**: Uses high-speed MediaPipe segmentation with temporal smoothing and morphological hole-filling for solid body detection.
+- **Zero-Lag Processing**: Fully optimized pipeline with lower-resolution processing paths for real-time responsiveness on the LED wall.
+- **Advanced Visualization**: Integrated LED simulator to preview the output before sending to hardware.
+- **Hardware Integration**:
+  - Auto-detection of ESP32-S3 devices.
+  - Support for dual-pin LED output (GPIO 5 & 18).
+  - High-speed 460800 baud serial communication.
+- **Test Mode**: Built-in test patterns (Solid, Rainbow, Scan) for LED panel verification and troubleshooting.
 
-```
-mirror-with-tests/
-├── motors/          # Motor control system (independent)
-│   ├── gui/         # Motor GUI application
-│   ├── controllers/ # Motor control logic
-│   ├── firmware/    # ESP32 motor firmware
-│   └── README.md    # Motor system guide
-│
-├── leds/            # LED control system (independent)
-│   ├── gui/         # LED GUI application
-│   ├── controllers/ # LED control logic
-│   ├── firmware/    # ESP32 LED firmware
-│   └── README.md    # LED system guide
-│
-├── shared/          # Shared utilities
-│   ├── io/          # Serial communication
-│   └── simulation/  # Simulation code
-│
-└── docs/            # Project documentation
-```
+## 🏗 System Architecture
 
-## 📚 Documentation
+- **GUI**: Modern dark-themed Tkinter interface.
+- **Tracking Engine**: Custom `BodySegmenter` using MediaPipe Task API.
+- **Data Path**: 32x64 silhouette mask -> Linear Serpentine Mapping -> Serial Packet.
+- **Firmware**: Compatible with the provided ESP32-S3 LED control firmware.
 
-- **Project Structure**: See `PROJECT_STRUCTURE.md`
-- **Motor System**: See `motors/README.md`
-- **LED System**: See `leds/README.md`
-- **Shared Utilities**: See `shared/README.md`
-
-## 🔧 Installation
-
-```bash
-# Install dependencies
-pip install -r requirements.txt
-```
-
-## ⚠️ Important Notes
-
-1. **Systems are independent** - Motors and LEDs run separately
-2. **No cross-dependencies** - Motors code doesn't import from leds/ and vice versa
-3. **Shared utilities only** - Both systems use `shared/` utilities
-4. **Separate GUIs** - Each system has its own GUI application
-
-## 🎨 Features
-
-### Motor System
-- 32 servo motors via ESP32-S3
-- Real-time body tracking
-- Wave effect from body position
-
-### LED System
-- 2048 WS2812B LEDs (32×64 matrix)
-- Body silhouette visualization
-- Multiple hardware mapping modes
-
-## 📖 For AI Assistants
-
-When working on this project:
-1. **Check which system** you're working on (motors/ or leds/)
-2. **Don't mix code** - keep motors and LEDs separate
-3. **Use shared/ utilities** for common functionality
-4. **Update documentation** when making changes
-5. **Test each system independently**
-
-See `PROJECT_STRUCTURE.md` for detailed architecture and guidelines.
-
-## License
-
-MIT
+---
+© 2026 Hookkapaani Kinetic Arts
