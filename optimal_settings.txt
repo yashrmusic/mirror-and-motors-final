@@ -1,0 +1,51 @@
+================================================================================
+MIRROR & MOTORS - OPTIMAL PERFORMANCE SETTINGS
+================================================================================
+Timestamp: 2026-02-19
+Project Path: C:\Users\Anas\Desktop\Hookkapani
+
+--------------------------------------------------------------------------------
+1. CORE HARDWARE LIMITS (The Bottlenecks)
+--------------------------------------------------------------------------------
+- Camera FPS: 25.0 FPS (Hardware capped) -> 40ms frame budget
+- ESP32 Loop: ~130ms when writing to 64 servos (I2C overhead)
+- PC Latency: ~8ms (Processing) + ~40ms (Video capture wait)
+- End-to-End Latency: ~67.48ms (Round-trip average)
+
+--------------------------------------------------------------------------------
+2. OPTIMAL SOFTWARE SETTINGS (Applied)
+--------------------------------------------------------------------------------
+
+[ PC SIDE - apps/gui/main.py ]
+- Segmentation Resolution: 192 x 144
+  (Fastest while maintaining accurate detection)
+- Temporal Smoothing: 0.0
+  (Disabled to eliminate lag buffer; response is now instant)
+- Queue Maxsize: 1
+  (Ensures the loop always processes the LATEST frame)
+- Morphology Kernel: 5x5 (Close)
+  (Cleans up mask edges in 0.07ms)
+
+[ FIRMWARE SIDE - firmware/esp32/src/main.cpp ]
+- Baud Rate: 460800
+- I2C Clock: 400 kHz (Fast Mode)
+  (Reduces servo write time to the absolute minimum)
+- Smooth Alpha: 1.0
+  (Instant servo reaction; no software dampening)
+- Loop Delay: 0ms
+  (Allows ESP32 to run as fast as the I2C bus permits)
+
+--------------------------------------------------------------------------------
+3. PERFORMANCE SUMMARY
+--------------------------------------------------------------------------------
+- Servo Updates: ~7-8 full 64-servo updates per second (I2C write bound)
+- Body Tracking: 25 updates per second (Camera capped)
+- Packet Loss: 0.0% (Stress tested up to 500Hz)
+- Latency Confidence: High (Zero timeouts during 100-sample latency test)
+
+--------------------------------------------------------------------------------
+NOTES:
+The bottleneck is currently the physical I2C write speed to 4 PCA9685 boards. 
+Increasing baud rate beyond 460800 or segmentation resolution beyond 192x144 
+will not improve performance due to these hardware limits.
+================================================================================

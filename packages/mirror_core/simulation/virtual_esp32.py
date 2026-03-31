@@ -7,13 +7,14 @@ Mimics the behavior of the real ESP32 firmware for LEDs and Motors.
 import threading
 import time
 import queue
+from collections import deque
 
 class VirtualESP32:
     def __init__(self):
         self.running = True
         self.led_state = [0] * (2048)  # 2048 LEDs (brightness)
         self.motor_angles = [90] * 64   # 64 Servos (0-180 degrees)
-        self.buffer = []
+        self.buffer = deque()
         self.state_lock = threading.Lock()
         
         # Output queue (to send data back to PC, e.g. "READY")
@@ -30,8 +31,7 @@ class VirtualESP32:
     def write(self, data):
         """Receive data from PC (bytes)"""
         with self.state_lock:
-            for byte in data:
-                self.buffer.append(byte)
+            self.buffer.extend(data)
             self._process_buffer()
 
     def read(self):
@@ -53,7 +53,7 @@ class VirtualESP32:
              # Look for Header AA BB
             if self.buffer[0] != 0xAA or self.buffer[1] != 0xBB:
                  # Pop byte and continue
-                self.buffer.pop(0)
+                self.buffer.popleft()
                 continue
             
             # Found Header
@@ -68,11 +68,13 @@ class VirtualESP32:
                     return # Wait for more data
                 
                 # Extract LED data
-                led_data = self.buffer[3:2051]
+                led_data = list(self.buffer)[3:2051]
                 self.led_state = led_data # Update state
                 
                 # Consume packet
-                self.buffer = self.buffer[2051:]
+                # Consume packet
+                for _ in range(2051):
+                    self.buffer.popleft()
                 
             elif packet_type == 0x02: # Servo Packet
                 # Needs 64 * 2 bytes + 3 header bytes = 131 bytes
@@ -84,15 +86,18 @@ class VirtualESP32:
                 if len(self.buffer) < total_size:
                     return # Wait for more data
                 
+                buf_list = list(self.buffer)
+                
                 # Extract Servo data
                 # 64 servos, 2 bytes each (High byte, Low byte)
                 # Value 0-1000 maps to 0-180 degrees
                 new_angles = []
                 for i in range(num_servos):
                     idx = 3 + (i * 2)
-                    hi = self.buffer[idx]
-                    lo = self.buffer[idx+1]
+                    hi = buf_list[idx]
+                    lo = buf_list[idx+1]
                     val = (hi << 8) | lo
+                    val = max(0, min(1000, val))  # Bounds check
                     
                     # Map 0-1000 -> 0-180
                     angle = (val / 1000.0) * 180.0
@@ -106,11 +111,13 @@ class VirtualESP32:
                     self.motor_angles[i] = new_angles[i]
                 
                 # Consume packet
-                self.buffer = self.buffer[total_size:]
+                for _ in range(total_size):
+                    self.buffer.popleft()
                 
             else:
                  # Unknown packet type, skip header
-                self.buffer = self.buffer[2:]
+                self.buffer.popleft()
+                self.buffer.popleft()
 
     def get_server_state(self):
         """Thread-safe access to state for visualizer"""

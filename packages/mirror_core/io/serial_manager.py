@@ -75,7 +75,7 @@ class SerialManager:
                  print(f"[OK] Simulation started on {self.port}")
                  return True
 
-            self.ser = serial.Serial(self.port, self.baudrate, timeout=1, write_timeout=0.1)
+            self.ser = serial.Serial(self.port, self.baudrate, timeout=1, write_timeout=1.0)
             
             # Force ESP32 Reset via DTR/RTS
             self.ser.dtr = False
@@ -94,11 +94,14 @@ class SerialManager:
             ready_received = False
             start_time = time.time()
             while time.time() - start_time < 15:  # Wait up to 15 seconds for full ESP32 boot (WiFi + servos)
-                if self.ser.in_waiting:
-                    line = self.ser.readline().decode('utf-8').strip()
-                    if 'READY' in line:
-                        ready_received = True
-                        break
+                try:
+                    if self.ser.in_waiting:
+                        line = self.ser.readline().decode('utf-8', errors='replace').strip()
+                        if 'READY' in line:
+                            ready_received = True
+                            break
+                except (OSError, serial.SerialException):
+                    break  # Port disappeared during boot wait
                 time.sleep(0.1)
 
             if ready_received:
@@ -138,11 +141,15 @@ class SerialManager:
         """Background thread to handle incoming serial data"""
         while self.running and self.ser:
             try:
+                if not self.ser.is_open:
+                    break
                 if self.ser.in_waiting:
-                    data = self.ser.readline().decode('utf-8').strip()
+                    data = self.ser.readline().decode('utf-8', errors='replace').strip()
                     if data:
                         print(f"ESP32: {data}")
-            except:
+            except (OSError, serial.SerialException):
+                break  # Port disconnected
+            except Exception:
                 pass
             time.sleep(0.01)
 
@@ -190,7 +197,7 @@ class SerialManager:
             print("[WARN] Serial write timed out (buffer full?) - skipping packet")
             try:
                 self.ser.reset_output_buffer()
-            except:
+            except Exception:
                 pass
             return False
         except OSError as e:
@@ -251,7 +258,14 @@ class SerialManager:
         """Close serial connection"""
         self.running = False
         if self.ser:
-            self.ser.close()
+            try:
+                self.ser.reset_output_buffer()
+            except Exception:
+                pass
+            try:
+                self.ser.close()
+            except Exception:
+                pass
         self.connected = False
 
     def stop(self):

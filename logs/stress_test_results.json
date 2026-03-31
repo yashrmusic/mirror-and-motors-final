@@ -1,0 +1,230 @@
+{
+  "timestamp": "2026-02-19T15:39:34.258212",
+  "port": "COM5",
+  "base_baud": 460800,
+  "duration": 5,
+  "baud_rates": [
+    {
+      "baud": 460800,
+      "status": "OK",
+      "packets_sent": 248,
+      "errors": 0,
+      "esp_fps": 0.0,
+      "esp_packets": 63.0,
+      "drop_rate": "74.6%"
+    },
+    {
+      "baud": 921600,
+      "status": "NO_RESPONSE",
+      "fps": 0,
+      "errors": -1
+    },
+    {
+      "baud": 1000000,
+      "status": "NO_RESPONSE",
+      "fps": 0,
+      "errors": -1
+    },
+    {
+      "baud": 2000000,
+      "status": "NO_RESPONSE",
+      "fps": 0,
+      "errors": -1
+    }
+  ],
+  "motor_send_rate": [
+    {
+      "target_rate": 30,
+      "packets_sent": 149,
+      "actual_rate": 29.8,
+      "errors": 0,
+      "esp_fps": 0.0,
+      "esp_packets": 87.0
+    },
+    {
+      "target_rate": 60,
+      "packets_sent": 299,
+      "actual_rate": 59.8,
+      "errors": 0,
+      "esp_fps": 0.0,
+      "esp_packets": 145.0
+    },
+    {
+      "target_rate": 120,
+      "packets_sent": 599,
+      "actual_rate": 119.8,
+      "errors": 0,
+      "esp_fps": 0.0,
+      "esp_packets": 185.0
+    },
+    {
+      "target_rate": 200,
+      "packets_sent": 999,
+      "actual_rate": 199.8,
+      "errors": 0,
+      "esp_fps": 0.0,
+      "esp_packets": 216.0
+    },
+    {
+      "target_rate": 500,
+      "packets_sent": 1602,
+      "actual_rate": 320.4,
+      "errors": 0,
+      "esp_fps": 0.0,
+      "esp_packets": 245.0
+    }
+  ],
+  "latency": {
+    "min_ms": 64.26,
+    "max_ms": 68.9,
+    "avg_ms": 67.48,
+    "median_ms": 67.46,
+    "timeouts": 0,
+    "samples": 100
+  },
+  "write_timeout": [
+    {
+      "write_timeout": 0.05,
+      "packets_sent": 246,
+      "timeout_errors": 0,
+      "other_errors": 0,
+      "success_rate": "100.0%"
+    },
+    {
+      "write_timeout": 0.1,
+      "packets_sent": 247,
+      "timeout_errors": 0,
+      "other_errors": 0,
+      "success_rate": "100.0%"
+    },
+    {
+      "write_timeout": 0.5,
+      "packets_sent": 248,
+      "timeout_errors": 0,
+      "other_errors": 0,
+      "success_rate": "100.0%"
+    },
+    {
+      "write_timeout": 1.0,
+      "packets_sent": 248,
+      "timeout_errors": 0,
+      "other_errors": 0,
+      "success_rate": "100.0%"
+    }
+  ],
+  "firmware_params": {
+    "alpha": [
+      {
+        "alpha": 0.3,
+        "FPS": 0.0,
+        "PKTS": 27.0,
+        "ERRS": 0.0,
+        "LOOP_US": 132741.0
+      },
+      {
+        "alpha": 0.5,
+        "FPS": 0.0,
+        "PKTS": 26.0,
+        "ERRS": 0.0,
+        "LOOP_US": 130694.0
+      },
+      {
+        "alpha": 0.8,
+        "FPS": 0.0,
+        "PKTS": 29.0,
+        "ERRS": 0.0,
+        "LOOP_US": 130258.0
+      },
+      {
+        "alpha": 1.0,
+        "FPS": 0.0,
+        "PKTS": 29.0,
+        "ERRS": 0.0,
+        "LOOP_US": 129175.0
+      }
+    ],
+    "delay": [
+      {
+        "delay_ms": 0,
+        "FPS": 0.0,
+        "PKTS": 30.0,
+        "ERRS": 0.0,
+        "LOOP_US": 130219.0
+      },
+      {
+        "delay_ms": 1,
+        "FPS": 0.0,
+        "PKTS": 27.0,
+        "ERRS": 0.0,
+        "LOOP_US": 130046.0
+      },
+      {
+        "delay_ms": 2,
+        "FPS": 0.0,
+        "PKTS": 27.0,
+        "ERRS": 0.0,
+        "LOOP_US": 133479.0
+      },
+      {
+        "delay_ms": 5,
+        "FPS": 0.0,
+        "PKTS": 31.0,
+        "ERRS": 0.0,
+        "LOOP_US": 131519.0
+      }
+    ],
+    "i2c": [
+      {
+        "i2c_khz": 100,
+        "FPS": 0.0,
+        "PKTS": 29.0,
+        "ERRS": 0.0,
+        "LOOP_US": 130913.0
+      },
+      {
+        "i2c_khz": 400,
+        "FPS": 0.0,
+        "PKTS": 26.0,
+        "ERRS": 0.0,
+        "LOOP_US": 133262.0
+      },
+      {
+        "i2c_khz": 1000,
+        "FPS": 0.0,
+        "PKTS": 33.0,
+        "ERRS": 0.0,
+        "LOOP_US": 133216.0
+      }
+    ],
+    "pwm_freq": [
+      {
+        "pwm_freq": 50,
+        "FPS": 0.0,
+        "PKTS": 30.0,
+        "ERRS": 0.0,
+        "LOOP_US": 133436.0
+      },
+      {
+        "pwm_freq": 100,
+        "FPS": 0.0,
+        "PKTS": 26.0,
+        "ERRS": 0.0,
+        "LOOP_US": 131653.0
+      },
+      {
+        "pwm_freq": 200,
+        "FPS": 0.0,
+        "PKTS": 30.0,
+        "ERRS": 0.0,
+        "LOOP_US": 132565.0
+      },
+      {
+        "pwm_freq": 330,
+        "FPS": 0.0,
+        "PKTS": 31.0,
+        "ERRS": 0.0,
+        "LOOP_US": 131086.0
+      }
+    ]
+  }
+}

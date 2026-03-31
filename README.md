@@ -1,109 +1,47 @@
-# Mirror Body Project
+# Kinetic Mirror - Motor Control System
 
-A full-body LED and motor simulation system for interactive art installations.
-
-## 🎯 Project Structure
-
-This project is **organized into separate, independent systems**:
-
-- **`motors/`** - Motor control system (32 servos)
-- **`leds/`** - LED control system (2048 LEDs)
-- **`shared/`** - Shared utilities (serial, simulation)
-
-Each system can run **independently** without the other.
+A high-performance kinetic sculpture control system utilizing real-time body silhouette tracking to drive an 8x8 matrix of servo motors.
 
 ## 🚀 Quick Start
 
-### Run Motors Only
-```bash
-cd motors/gui
-python motor_gui.py
-```
+1. **Prerequisites**
+   - Python 3.9+
+   - USB Web Camera
+   - ESP32-S3 with PCA9685 Motor Drivers (Hardware Mode)
 
-### Run LEDs Only
-```bash
-cd leds/gui
-python led_gui.py
-```
+2. **Installation**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### Run Both (Separate Processes)
-```bash
-# Terminal 1 - Motors
-cd motors/gui
-python motor_gui.py
+3. **Run Application**
+   Double-click `run.bat` or run:
+   ```bash
+   python -m apps.gui.main
+   ```
 
-# Terminal 2 - LEDs
-cd leds/gui
-python led_gui.py
-```
+## 🎮 Features
 
-## 📁 Project Organization
+- **Optimized Silhouette Tracking**: Uses high-speed MediaPipe segmentation with temporal smoothing and morphological hole-filling for solid body detection.
+- **Zero-Lag Processing**: Fully optimized pipeline with lower-resolution processing paths and silenced console hot-paths for real-time responsiveness.
+- **Advanced Visualization**: High-contrast Blue (Background) and Green (Human) overlay with 8x8 grid projection.
+- **Hardware Integration**:
+  - Auto-detection of ESP32-S3 devices.
+  - Integrated firmware flasher for easy deployment.
+  - Support for 64 servo motors across 4 PCA9685 drivers.
+- **Manual & Test Modes**: Comprehensive tools for testing motor range, wiring verification, and custom wave patterns.
 
-```
-mirror-with-tests/
-├── motors/          # Motor control system (independent)
-│   ├── gui/         # Motor GUI application
-│   ├── controllers/ # Motor control logic
-│   ├── firmware/    # ESP32 motor firmware
-│   └── README.md    # Motor system guide
-│
-├── leds/            # LED control system (independent)
-│   ├── gui/         # LED GUI application
-│   ├── controllers/ # LED control logic
-│   ├── firmware/    # ESP32 LED firmware
-│   └── README.md    # LED system guide
-│
-├── shared/          # Shared utilities
-│   ├── io/          # Serial communication
-│   └── simulation/  # Simulation code
-│
-└── docs/            # Project documentation
-```
+## 🏗 System Architecture
 
-## 📚 Documentation
+- **GUI**: Modern dark-themed Tkinter interface.
+- **Tracking Engine**: Custom `BodySegmenter` using MediaPipe Task API.
+- **Communication**: Optimized serial packet protocol (0xAA 0xBB header).
+- **Firmware**: Compatible with the provided ESP32-S3 motor control firmware.
 
-- **Project Structure**: See `PROJECT_STRUCTURE.md`
-- **Motor System**: See `motors/README.md`
-- **LED System**: See `leds/README.md`
-- **Shared Utilities**: See `shared/README.md`
+## 🛠 Calibration
 
-## 🔧 Installation
+- **Live Mode**: Motors will follow your silhouette. Ensure adequate lighting for the camera.
+- **Test Mode**: Use the "Wave" or "Test" buttons to verify all 64 motors are responding correctly.
 
-```bash
-# Install dependencies
-pip install -r requirements.txt
-```
-
-## ⚠️ Important Notes
-
-1. **Systems are independent** - Motors and LEDs run separately
-2. **No cross-dependencies** - Motors code doesn't import from leds/ and vice versa
-3. **Shared utilities only** - Both systems use `shared/` utilities
-4. **Separate GUIs** - Each system has its own GUI application
-
-## 🎨 Features
-
-### Motor System
-- 32 servo motors via ESP32-S3
-- Real-time body tracking
-- Wave effect from body position
-
-### LED System
-- 2048 WS2812B LEDs (32×64 matrix)
-- Body silhouette visualization
-- Multiple hardware mapping modes
-
-## 📖 For AI Assistants
-
-When working on this project:
-1. **Check which system** you're working on (motors/ or leds/)
-2. **Don't mix code** - keep motors and LEDs separate
-3. **Use shared/ utilities** for common functionality
-4. **Update documentation** when making changes
-5. **Test each system independently**
-
-See `PROJECT_STRUCTURE.md` for detailed architecture and guidelines.
-
-## License
-
-MIT
+---
+© 2026 Hookkapaani Kinetic Arts

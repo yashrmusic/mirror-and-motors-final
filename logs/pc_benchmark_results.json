@@ -1,0 +1,340 @@
+{
+  "timestamp": "2026-02-19T15:49:05.119295",
+  "camera_idx": 1,
+  "camera_fps": [
+    {
+      "requested": "160x120",
+      "actual": "160x120",
+      "fps": 25.0,
+      "frame_time_ms": 40.0
+    },
+    {
+      "requested": "320x240",
+      "actual": "320x240",
+      "fps": 25.0,
+      "frame_time_ms": 40.0
+    },
+    {
+      "requested": "480x360",
+      "actual": "640x360",
+      "fps": 25.0,
+      "frame_time_ms": 40.0
+    },
+    {
+      "requested": "640x480",
+      "actual": "640x480",
+      "fps": 25.0,
+      "frame_time_ms": 40.0
+    }
+  ],
+  "resize_speed": [
+    {
+      "target": "128x96",
+      "method": "INTER_NEAREST",
+      "min_ms": 0.01,
+      "max_ms": 0.02,
+      "avg_ms": 0.01,
+      "median_ms": 0.01
+    },
+    {
+      "target": "128x96",
+      "method": "INTER_LINEAR",
+      "min_ms": 0.03,
+      "max_ms": 0.03,
+      "avg_ms": 0.03,
+      "median_ms": 0.03
+    },
+    {
+      "target": "128x96",
+      "method": "INTER_AREA",
+      "min_ms": 0.24,
+      "max_ms": 0.34,
+      "avg_ms": 0.25,
+      "median_ms": 0.25
+    },
+    {
+      "target": "128x96",
+      "method": "INTER_CUBIC",
+      "min_ms": 0.09,
+      "max_ms": 0.17,
+      "avg_ms": 0.09,
+      "median_ms": 0.09
+    },
+    {
+      "target": "160x120",
+      "method": "INTER_NEAREST",
+      "min_ms": 0.02,
+      "max_ms": 0.05,
+      "avg_ms": 0.02,
+      "median_ms": 0.02
+    },
+    {
+      "target": "160x120",
+      "method": "INTER_LINEAR",
+      "min_ms": 0.04,
+      "max_ms": 0.07,
+      "avg_ms": 0.04,
+      "median_ms": 0.04
+    },
+    {
+      "target": "160x120",
+      "method": "INTER_AREA",
+      "min_ms": 0.23,
+      "max_ms": 0.47,
+      "avg_ms": 0.27,
+      "median_ms": 0.24
+    },
+    {
+      "target": "160x120",
+      "method": "INTER_CUBIC",
+      "min_ms": 0.11,
+      "max_ms": 0.28,
+      "avg_ms": 0.13,
+      "median_ms": 0.12
+    },
+    {
+      "target": "256x192",
+      "method": "INTER_NEAREST",
+      "min_ms": 0.04,
+      "max_ms": 0.09,
+      "avg_ms": 0.04,
+      "median_ms": 0.04
+    },
+    {
+      "target": "256x192",
+      "method": "INTER_LINEAR",
+      "min_ms": 0.09,
+      "max_ms": 0.48,
+      "avg_ms": 0.13,
+      "median_ms": 0.1
+    },
+    {
+      "target": "256x192",
+      "method": "INTER_AREA",
+      "min_ms": 0.59,
+      "max_ms": 0.94,
+      "avg_ms": 0.67,
+      "median_ms": 0.65
+    },
+    {
+      "target": "256x192",
+      "method": "INTER_CUBIC",
+      "min_ms": 0.2,
+      "max_ms": 0.47,
+      "avg_ms": 0.23,
+      "median_ms": 0.2
+    },
+    {
+      "target": "320x240",
+      "method": "INTER_NEAREST",
+      "min_ms": 0.05,
+      "max_ms": 0.08,
+      "avg_ms": 0.05,
+      "median_ms": 0.05
+    },
+    {
+      "target": "320x240",
+      "method": "INTER_LINEAR",
+      "min_ms": 0.06,
+      "max_ms": 0.1,
+      "avg_ms": 0.07,
+      "median_ms": 0.06
+    },
+    {
+      "target": "320x240",
+      "method": "INTER_AREA",
+      "min_ms": 0.06,
+      "max_ms": 0.07,
+      "avg_ms": 0.07,
+      "median_ms": 0.07
+    },
+    {
+      "target": "320x240",
+      "method": "INTER_CUBIC",
+      "min_ms": 0.25,
+      "max_ms": 0.58,
+      "avg_ms": 0.31,
+      "median_ms": 0.26
+    }
+  ],
+  "segmentation_speed": [
+    {
+      "resolution": "128x96",
+      "max_fps": 190.8,
+      "min_ms": 4.42,
+      "max_ms": 7.27,
+      "avg_ms": 5.24,
+      "median_ms": 5.14
+    },
+    {
+      "resolution": "160x120",
+      "max_fps": 182.5,
+      "min_ms": 4.63,
+      "max_ms": 7.61,
+      "avg_ms": 5.48,
+      "median_ms": 5.44
+    },
+    {
+      "resolution": "192x144",
+      "max_fps": 150.2,
+      "min_ms": 5.11,
+      "max_ms": 14.31,
+      "avg_ms": 6.66,
+      "median_ms": 6.11
+    },
+    {
+      "resolution": "256x192",
+      "max_fps": 148.8,
+      "min_ms": 6.15,
+      "max_ms": 7.8,
+      "avg_ms": 6.72,
+      "median_ms": 6.63
+    },
+    {
+      "resolution": "320x240",
+      "max_fps": 118.5,
+      "min_ms": 7.2,
+      "max_ms": 9.99,
+      "avg_ms": 8.44,
+      "median_ms": 8.49
+    }
+  ],
+  "morphology_speed": [
+    {
+      "kernel_size": 3,
+      "min_ms": 0.04,
+      "max_ms": 0.05,
+      "avg_ms": 0.04,
+      "median_ms": 0.04
+    },
+    {
+      "kernel_size": 5,
+      "min_ms": 0.06,
+      "max_ms": 0.4,
+      "avg_ms": 0.08,
+      "median_ms": 0.07
+    },
+    {
+      "kernel_size": 7,
+      "min_ms": 0.1,
+      "max_ms": 0.41,
+      "avg_ms": 0.12,
+      "median_ms": 0.1
+    },
+    {
+      "kernel_size": 9,
+      "min_ms": 0.15,
+      "max_ms": 0.52,
+      "avg_ms": 0.18,
+      "median_ms": 0.17
+    },
+    {
+      "kernel_size": 11,
+      "min_ms": 0.22,
+      "max_ms": 0.73,
+      "avg_ms": 0.26,
+      "median_ms": 0.25
+    }
+  ],
+  "queue_latency": [
+    {
+      "maxsize": 1,
+      "avg_us": 1.7,
+      "median_us": 1.2
+    },
+    {
+      "maxsize": 2,
+      "avg_us": 1.1,
+      "median_us": 1.0
+    },
+    {
+      "maxsize": 3,
+      "avg_us": 1.2,
+      "median_us": 1.1
+    },
+    {
+      "maxsize": 5,
+      "avg_us": 1.2,
+      "median_us": 1.2
+    }
+  ],
+  "full_pipeline": [
+    {
+      "config": "MIN: 128x96, no smooth",
+      "capture_ms": 33.8,
+      "resize_ms": 0.1,
+      "segment_ms": 5.9,
+      "postproc_ms": 0.3,
+      "total_ms": 40.0,
+      "max_fps": 25.0
+    },
+    {
+      "config": "LOW: 128x96, smooth 0.3",
+      "capture_ms": 33.8,
+      "resize_ms": 0.1,
+      "segment_ms": 5.8,
+      "postproc_ms": 0.2,
+      "total_ms": 40.0,
+      "max_fps": 25.0
+    },
+    {
+      "config": "MED: 192x144, no smooth",
+      "capture_ms": 33.0,
+      "resize_ms": 0.1,
+      "segment_ms": 6.6,
+      "postproc_ms": 0.2,
+      "total_ms": 40.0,
+      "max_fps": 25.0
+    },
+    {
+      "config": "CURRENT: 256x192, no smooth",
+      "capture_ms": 32.2,
+      "resize_ms": 0.2,
+      "segment_ms": 7.3,
+      "postproc_ms": 0.3,
+      "total_ms": 40.0,
+      "max_fps": 25.0
+    },
+    {
+      "config": "CURRENT+SM: 256x192, smooth 0.3",
+      "capture_ms": 32.3,
+      "resize_ms": 0.2,
+      "segment_ms": 7.2,
+      "postproc_ms": 0.4,
+      "total_ms": 40.0,
+      "max_fps": 25.0
+    },
+    {
+      "config": "HIGH: 320x240, no smooth",
+      "capture_ms": 30.9,
+      "resize_ms": 0.1,
+      "segment_ms": 8.6,
+      "postproc_ms": 0.4,
+      "total_ms": 40.0,
+      "max_fps": 25.0
+    }
+  ],
+  "packet_build": [
+    {
+      "method": "Loop + struct.pack",
+      "min_ms": 0.01,
+      "max_ms": 0.11,
+      "avg_ms": 0.01,
+      "median_ms": 0.01
+    },
+    {
+      "method": "Batch struct.pack",
+      "min_ms": 0.01,
+      "max_ms": 0.07,
+      "avg_ms": 0.01,
+      "median_ms": 0.01
+    },
+    {
+      "method": "NumPy tobytes",
+      "min_ms": 0.01,
+      "max_ms": 0.03,
+      "avg_ms": 0.01,
+      "median_ms": 0.01
+    }
+  ]
+}

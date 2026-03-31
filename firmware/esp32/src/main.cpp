@@ -42,21 +42,22 @@ const char *password = "loki@1234";
 #define PANEL_H 16
 
 // ==================== SERVO CONFIGURATION ====================
-#define NUM_SERVOS 32       // 32 servos (2x PCA9685 boards)
+#define NUM_SERVOS 64       // 64 servos (4x PCA9685 boards)
 #define PCA9685_ADDR_1 0x40 // First PCA9685 (servos 0-15)
 #define PCA9685_ADDR_2 0x41 // Second PCA9685 (servos 16-31)
+#define PCA9685_ADDR_3 0x42 // Third PCA9685 (servos 32-47)
+#define PCA9685_ADDR_4 0x43 // Fourth PCA9685 (servos 48-63)
 #define SERVO_FREQ 50
 #define OSC_FREQ 27000000
 
 #define PWM_MIN 250
 #define PWM_MAX 470
-#define SMOOTH_ALPHA 0.3
+#define SMOOTH_ALPHA 1.0    // Optimized: 1.0 = instant response (no smoothing lag)
 
 // ==================== SERIAL PROTOCOL ====================
 #define BAUD_RATE 460800
 #define PACKET_LED_SIZE 2051 // Header(2) + Type(1) + Data(2048)
-#define PACKET_SERVO_SIZE                                                      \
-  67 // Header(2) + Type(1) + ServoData(64) for 32 servos
+#define PACKET_SERVO_SIZE 131 // Header(2) + Type(1) + ServoData(128) for 64 servos
 
 #define PKT_TYPE_LED 0x01
 #define PKT_TYPE_SERVO 0x02
@@ -67,6 +68,8 @@ CRGB leds_right[LEDS_PER_PIN];
 
 Adafruit_PWMServoDriver pwm1 = Adafruit_PWMServoDriver(PCA9685_ADDR_1);
 Adafruit_PWMServoDriver pwm2 = Adafruit_PWMServoDriver(PCA9685_ADDR_2);
+Adafruit_PWMServoDriver pwm3 = Adafruit_PWMServoDriver(PCA9685_ADDR_3);
+Adafruit_PWMServoDriver pwm4 = Adafruit_PWMServoDriver(PCA9685_ADDR_4);
 float servoPositions[NUM_SERVOS];
 float targetPositions[NUM_SERVOS];
 
@@ -109,12 +112,15 @@ void setServoAngle(uint8_t id, float angle) {
 
   uint16_t pwm_value = angleToPWM(servoPositions[id]);
 
-  // Route to correct PCA9685 board
+  // Route to correct PCA9685 board (4 boards, 16 channels each)
   if (id < 16) {
-    pwm1.setPWM(id, 0, pwm_value); // First board: servos 0-15
+    pwm1.setPWM(id, 0, pwm_value);      // Board 1: servos 0-15
+  } else if (id < 32) {
+    pwm2.setPWM(id - 16, 0, pwm_value); // Board 2: servos 16-31
+  } else if (id < 48) {
+    pwm3.setPWM(id - 32, 0, pwm_value); // Board 3: servos 32-47
   } else {
-    pwm2.setPWM(id - 16, 0,
-                pwm_value); // Second board: servos 16-31 (offset by 16)
+    pwm4.setPWM(id - 48, 0, pwm_value); // Board 4: servos 48-63
   }
 }
 
@@ -245,27 +251,41 @@ void setup() {
     delay(100);
   }
 
-  // Servos (dual PCA9685 for 32 servos)
-  Serial.println("Init servos (32 channels)...");
-  Wire.begin();
+  // Servos (4x PCA9685 for 64 servos)
+  Serial.println("Init servos (64 channels, 4 boards)...");
+  // Use custom I2C pins: SDA=GPIO18, SCL=GPIO19
+  Wire.begin(18, 19);  // SDA=D18, SCL=D19
+  Wire.setClock(400000); // Optimized: 400kHz Fast Mode
 
-  // Initialize first PCA9685 (servos 0-15)
+  // Initialize all 4 PCA9685 boards
   pwm1.begin();
   pwm1.setOscillatorFrequency(OSC_FREQ);
   pwm1.setPWMFreq(SERVO_FREQ);
+  Serial.println("  PCA9685 #1 (0x40): OK");
 
-  // Initialize second PCA9685 (servos 16-31)
   pwm2.begin();
   pwm2.setOscillatorFrequency(OSC_FREQ);
   pwm2.setPWMFreq(SERVO_FREQ);
+  Serial.println("  PCA9685 #2 (0x41): OK");
+
+  pwm3.begin();
+  pwm3.setOscillatorFrequency(OSC_FREQ);
+  pwm3.setPWMFreq(SERVO_FREQ);
+  Serial.println("  PCA9685 #3 (0x42): OK");
+
+  pwm4.begin();
+  pwm4.setOscillatorFrequency(OSC_FREQ);
+  pwm4.setPWMFreq(SERVO_FREQ);
+  Serial.println("  PCA9685 #4 (0x43): OK");
 
   centerAllServos();
   delay(500);
 
-  // Servo test
+  // Servo test - quick sweep (faster for 64 servos)
+  Serial.println("Testing all 64 servos...");
   for (uint8_t i = 0; i < NUM_SERVOS; i++) {
     setServoAngle(i, 120);
-    delay(100);
+    delay(20);  // Faster delay for 64 servos
   }
   delay(200);
   centerAllServos();
@@ -393,5 +413,5 @@ void loop() {
     lastFPSUpdate = millis();
   }
 
-  delay(5);
+  // No loop delay for maximum performance
 }

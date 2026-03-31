@@ -308,15 +308,13 @@ class LEDController:
         # Apply hardware mapping before transmission
         brightness = self.remap_for_hardware(brightness)
 
-        # Flatten in row-major order
-        flat = brightness.flatten().tolist()
-        if len(flat) != self.width * self.height:
+        # Fast path: use numpy tobytes() instead of Python list iteration
+        flat = brightness.flatten()
+        if flat.size != self.width * self.height:
             raise ValueError("LED frame does not contain expected number of pixels")
 
-        packet = [0xAA, 0xBB, 0x01]
-        packet.extend(int(v) for v in flat)
-
-        return bytes(packet)
+        header = b'\xAA\xBB\x01'
+        return header + flat.tobytes()
 
 
 # Quick test
